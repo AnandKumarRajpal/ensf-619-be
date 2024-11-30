@@ -20,7 +20,7 @@ jobs:
 
     - name: Execute Commands on Oracle Cloud Instance
       run: |
-        ssh -o StrictHostKeyChecking=no oracle_user@your_oracle_instance_ip << 'EOF'
+        ssh -o StrictHostKeyChecking=no ubuntu@168.138.94.153 << 'EOF'
         cd ensf-619-be/
         git pull origin main
         sudo systemctl daemon-reload
