@@ -1,0 +1,31 @@
+name: Deploy and Restart Services
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Execute Commands on Oracle Cloud Instance
+      run: |
+        ssh -o StrictHostKeyChecking=no oracle_user@your_oracle_instance_ip << 'EOF'
+        cd ensf-619-be/
+        git pull origin main
+        sudo systemctl daemon-reload
+        sudo systemctl restart gunicorn
+        sudo systemctl restart nginx
+        EOF
+      env:
+        SSH_AUTH_SOCK: ${{ secrets.SSH_AUTH_SOCK }}
