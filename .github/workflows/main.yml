@@ -3,7 +3,7 @@ name: Deploy and Restart Services
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the main branch
+      - main
 
 jobs:
   deploy:
@@ -14,9 +14,11 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > key_file.key
+        chmod 600 key_file.key
+        eval "$(ssh-agent -s)"
+        ssh-add key_file.key
 
     - name: Execute Commands on Oracle Cloud Instance
       run: |
@@ -27,5 +29,3 @@ jobs:
         sudo systemctl restart gunicorn
         sudo systemctl restart nginx
         EOF
-      env:
-        SSH_AUTH_SOCK: ${{ secrets.SSH_AUTH_SOCK }}
