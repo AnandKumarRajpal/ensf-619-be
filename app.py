@@ -1,9 +1,7 @@
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
-from pydantic import BaseModel
 import pandas as pd
 import io
 import joblib
-import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
 
 # Load the logistic regression model pipeline
