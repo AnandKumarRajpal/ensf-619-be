@@ -46,7 +46,3 @@ async def predict(
    
     # Return the prediction
     return {"potential": list(data['Potential(V)']), "current": list(data["Current (uA)"]), "prediction": list(prediction), "temperature": temperature, "ph": ph}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
