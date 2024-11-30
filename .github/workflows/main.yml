@@ -13,12 +13,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up SSH
+    - name: Add Host to Known Hosts
       run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > key_file.key
-        chmod 600 key_file.key
-        eval "$(ssh-agent -s)"
-        ssh-add key_file.key
+        ssh-keyscan -H 168.138.94.153 >> ~/.ssh/known_hosts
 
     - name: Execute Commands on Oracle Cloud Instance
       run: |
