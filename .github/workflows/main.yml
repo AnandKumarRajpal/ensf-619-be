@@ -10,19 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Add Host to Known Hosts
-      run: |
-        ssh-keyscan -H 168.138.94.153 >> ~/.ssh/known_hosts
-
-    - name: Execute Commands on Oracle Cloud Instance
-      run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@168.138.94.153 << 'EOF'
-        cd ensf-619-be/
-        git pull origin main
-        sudo systemctl daemon-reload
-        sudo systemctl restart gunicorn
-        sudo systemctl restart nginx
-        EOF
+    - name: executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: whoami
